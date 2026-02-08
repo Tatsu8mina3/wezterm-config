@@ -14,17 +14,40 @@ local mod_shift = is_windows and "CTRL|SHIFT" or "SUPER|SHIFT"
 local maximized_state = {}
 
 local toggle_maximize = wezterm.action_callback(function(window, pane)
+  wezterm.log_info("toggle_maximize: called")
+
   local id = window:window_id()
-  local screen = wezterm.gui.screens().active
+  wezterm.log_info("toggle_maximize: window_id = " .. tostring(id))
+
+  local ok_s, screens = pcall(function() return wezterm.gui.screens() end)
+  if not ok_s then
+    wezterm.log_error("toggle_maximize: gui.screens() failed: " .. tostring(screens))
+    return
+  end
+  local screen = screens.active
+  wezterm.log_info("toggle_maximize: screen = " .. tostring(screen.width) .. "x" .. tostring(screen.height) .. " scale=" .. tostring(screen.scale))
+
   if maximized_state[id] then
     local orig = maximized_state[id]
-    window:set_inner_size(orig.w, orig.h)
+    wezterm.log_info("toggle_maximize: restoring to " .. orig.w .. "x" .. orig.h)
+    local ok, err = pcall(function() window:set_inner_size(orig.w, orig.h) end)
+    if not ok then wezterm.log_error("set_inner_size failed: " .. tostring(err)) end
     maximized_state[id] = nil
   else
     local dims = window:get_dimensions()
+    wezterm.log_info("toggle_maximize: current dims = " .. dims.pixel_width .. "x" .. dims.pixel_height)
     maximized_state[id] = { w = dims.pixel_width, h = dims.pixel_height }
-    window:set_position(screen.x, screen.y)
-    window:set_inner_size(screen.width, screen.height)
+
+    -- Retina対応: screen座標はポイント単位なのでscaleを掛ける
+    local pw = math.floor(screen.width * screen.scale)
+    local ph = math.floor(screen.height * screen.scale)
+    wezterm.log_info("toggle_maximize: target size = " .. pw .. "x" .. ph)
+
+    local ok1, e1 = pcall(function() window:set_position(screen.x, screen.y) end)
+    if not ok1 then wezterm.log_error("set_position failed: " .. tostring(e1)) end
+
+    local ok2, e2 = pcall(function() window:set_inner_size(pw, ph) end)
+    if not ok2 then wezterm.log_error("set_inner_size failed: " .. tostring(e2)) end
   end
 end)
 
