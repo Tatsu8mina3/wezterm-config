@@ -16,6 +16,7 @@ config.use_ime = true
 config.front_end = "OpenGL"
 config.window_background_opacity = 0.6
 config.macos_window_background_blur = 0
+config.native_macos_fullscreen_mode = false
 
 ----------------------------------------------------
 -- Shell
