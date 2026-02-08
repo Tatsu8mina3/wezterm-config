@@ -4,12 +4,51 @@ local config = wezterm.config_builder()
 config.automatically_reload_config = true
 
 ----------------------------------------------------
--- Git auto-pull（起動時に設定を同期）
+-- Git auto-pull（起動時に設定を同期 → 結果を通知）
 ----------------------------------------------------
 wezterm.on("gui-startup", function()
-  wezterm.background_child_process({
+  local success, stdout, stderr = wezterm.run_child_process({
     "git", "-C", wezterm.config_dir, "pull", "--ff-only",
   })
+  -- wezterm.GLOBAL は設定リロードをまたいで値を保持できる
+  wezterm.GLOBAL.pull_result = { success = success, stdout = stdout, stderr = stderr }
+end)
+
+wezterm.on("window-config-reloaded", function(window, pane)
+  local result = wezterm.GLOBAL.pull_result
+  if result then
+    local msg, color
+    if result.success then
+      local out = result.stdout:gsub("%s+$", "")
+      if out == "Already up to date." or out == "Already up-to-date." then
+        msg = " up to date "
+        color = "#5c6d74"
+      else
+        msg = " config updated "
+        color = "#ae8b2d"
+      end
+    else
+      msg = " sync failed "
+      color = "#cc6666"
+    end
+    window:set_right_status(wezterm.format({
+      { Foreground = { Color = "#FFFFFF" } },
+      { Background = { Color = color } },
+      { Text = msg },
+    }))
+    -- タブが1つでもタブバーを一時表示
+    local overrides = window:get_config_overrides() or {}
+    overrides.hide_tab_bar_if_only_one_tab = false
+    window:set_config_overrides(overrides)
+    -- 5秒後にステータスを消してタブバーも元に戻す
+    wezterm.time.call_after(5, function()
+      window:set_right_status("")
+      local o = window:get_config_overrides() or {}
+      o.hide_tab_bar_if_only_one_tab = nil
+      window:set_config_overrides(o)
+    end)
+    wezterm.GLOBAL.pull_result = nil
+  end
 end)
 config.font_size = 12.0
 config.use_ime = true
