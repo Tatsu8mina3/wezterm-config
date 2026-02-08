@@ -88,7 +88,7 @@ local keys = {
   { key = "k", mods = mod_shift, action = act.ClearScrollback("ScrollbackOnly") },
   { key = "l", mods = mod_shift, action = act.ShowDebugOverlay },
   { key = "p", mods = mod_shift, action = act.ActivateCommandPalette },
-  { key = "f", mods = mod_shift, action = act.Search({ CaseSensitiveString = "" }) },
+  { key = "f", mods = mod_shift, action = is_windows and act.Search({ CaseSensitiveString = "" }) or toggle_maximize },
   { key = "Space", mods = mod_shift, action = act.QuickSelect },
   { key = "x", mods = mod_shift, action = act.ActivateCopyMode },
   { key = "u", mods = mod_shift, action = act.CharSelect },
