@@ -120,6 +120,9 @@ local keys = {
   { key = "PageUp", mods = "SHIFT", action = act.ScrollByPage(-1) },
   { key = "PageDown", mods = "SHIFT", action = act.ScrollByPage(1) },
 
+  -- Mac: Cmd+F でウィンドウ最大化（透過維持）
+  { key = "f", mods = "SUPER", action = toggle_maximize },
+
   -- アプリ終了（Mac: Cmd+Q / Windows: Ctrl+Q）
   { key = "q", mods = mod, action = act.QuitApplication },
 }
