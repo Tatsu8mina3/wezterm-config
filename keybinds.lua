@@ -76,7 +76,7 @@ local keys = {
   -- ウィンドウ・フォント
   -- --------------------------------------------------
   { key = "n", mods = mod_shift, action = act.SpawnWindow },
-  { key = "Enter", mods = "ALT", action = act.ToggleFullScreen },
+  { key = "Enter", mods = "ALT", action = is_windows and act.ToggleFullScreen or toggle_maximize },
   { key = "-", mods = mod, action = act.DecreaseFontSize },
   { key = "=", mods = mod, action = act.IncreaseFontSize },
   { key = "0", mods = mod, action = act.ResetFontSize },
