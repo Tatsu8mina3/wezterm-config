@@ -29,8 +29,12 @@ end
 ----------------------------------------------------
 -- Tab
 ----------------------------------------------------
--- タイトルバーを非表示
-config.window_decorations = "RESIZE"
+-- タイトルバーを非表示（Macではブラー付き透過を有効化）
+if is_windows then
+  config.window_decorations = "RESIZE"
+else
+  config.window_decorations = "RESIZE|MACOS_FORCE_DISABLE_SHADOW"
+end
 -- タブバーの表示
 config.show_tabs_in_tab_bar = true
 -- タブが一つの時は非表示
