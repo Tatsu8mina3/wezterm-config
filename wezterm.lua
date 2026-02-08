@@ -15,7 +15,7 @@ config.font_size = 12.0
 config.use_ime = true
 config.front_end = "OpenGL"
 config.window_background_opacity = 0.6
-config.macos_window_background_blur = 20
+config.macos_window_background_blur = 0
 
 ----------------------------------------------------
 -- Shell
@@ -101,7 +101,5 @@ end)
 config.disable_default_key_bindings = true
 config.keys = require("keybinds").keys
 config.key_tables = require("keybinds").key_tables
--- Leader: Windows=Ctrl+q / Mac=Cmd+q
-config.leader = { key = "q", mods = is_windows and "CTRL" or "SUPER", timeout_milliseconds = 2000 }
 
 return config

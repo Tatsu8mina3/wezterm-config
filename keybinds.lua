@@ -7,7 +7,6 @@ local act = wezterm.action
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 local mod = is_windows and "CTRL" or "SUPER"
 local mod_shift = is_windows and "CTRL|SHIFT" or "SUPER|SHIFT"
-local leader_mod = is_windows and "CTRL" or "SUPER"
 
 local keys = {
   -- --------------------------------------------------
@@ -78,33 +77,8 @@ local keys = {
   { key = "PageUp", mods = "SHIFT", action = act.ScrollByPage(-1) },
   { key = "PageDown", mods = "SHIFT", action = act.ScrollByPage(1) },
 
-  -- --------------------------------------------------
-  -- Leader（Windows: Ctrl+q / Mac: Cmd+q）キーバインド
-  -- --------------------------------------------------
-  { key = "|", mods = "LEADER|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-  { key = "-", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-  {
-    key = "r",
-    mods = "LEADER",
-    action = act.ActivateKeyTable({
-      name = "resize_pane",
-      one_shot = false,
-    }),
-  },
-  {
-    key = "a",
-    mods = "LEADER",
-    action = act.ActivateKeyTable({
-      name = "activate_pane",
-      timeout_milliseconds = 1000,
-    }),
-  },
-  -- Leader キーをそのまま送る（2回押した場合）
-  {
-    key = "q",
-    mods = "LEADER|" .. leader_mod,
-    action = act.SendKey({ key = "q", mods = leader_mod }),
-  },
+  -- アプリ終了（Mac: Cmd+Q / Windows: Ctrl+Q）
+  { key = "q", mods = mod, action = act.QuitApplication },
 }
 
 local key_tables = {
