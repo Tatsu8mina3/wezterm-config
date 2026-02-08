@@ -8,6 +8,26 @@ local is_windows = wezterm.target_triple:find("windows") ~= nil
 local mod = is_windows and "CTRL" or "SUPER"
 local mod_shift = is_windows and "CTRL|SHIFT" or "SUPER|SHIFT"
 
+----------------------------------------------------
+-- Mac用: フルスクリーン代わりに最大化（透過を維持）
+----------------------------------------------------
+local maximized_state = {}
+
+local toggle_maximize = wezterm.action_callback(function(window, pane)
+  local id = window:window_id()
+  local screen = wezterm.gui.screens().active
+  if maximized_state[id] then
+    local orig = maximized_state[id]
+    window:set_inner_size(orig.w, orig.h)
+    maximized_state[id] = nil
+  else
+    local dims = window:get_dimensions()
+    maximized_state[id] = { w = dims.pixel_width, h = dims.pixel_height }
+    window:set_position(screen.x, screen.y)
+    window:set_inner_size(screen.width, screen.height)
+  end
+end)
+
 local keys = {
   -- --------------------------------------------------
   -- コピー・ペースト
