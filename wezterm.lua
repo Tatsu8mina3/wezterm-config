@@ -6,12 +6,14 @@ config.automatically_reload_config = true
 ----------------------------------------------------
 -- Git auto-pull（起動時に設定を同期 → 結果を通知）
 ----------------------------------------------------
-wezterm.on("gui-startup", function()
+wezterm.on("gui-startup", function(cmd)
   local success, stdout, stderr = wezterm.run_child_process({
     "git", "-C", wezterm.config_dir, "pull", "--ff-only",
   })
   -- wezterm.GLOBAL は設定リロードをまたいで値を保持できる
   wezterm.GLOBAL.pull_result = { success = success, stdout = stdout, stderr = stderr }
+  -- gui-startup を定義するとデフォルトウィンドウが作られないため明示的に生成
+  local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
 end)
 
 wezterm.on("window-config-reloaded", function(window, pane)
