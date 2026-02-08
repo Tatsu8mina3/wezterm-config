@@ -69,6 +69,8 @@ local keys = {
   -- --------------------------------------------------
   -- ペイン操作（直接）
   -- --------------------------------------------------
+  { key = "d", mods = mod, action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+  { key = "d", mods = mod_shift, action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
   { key = "LeftArrow", mods = mod_shift, action = act.ActivatePaneDirection("Left") },
   { key = "RightArrow", mods = mod_shift, action = act.ActivatePaneDirection("Right") },
   { key = "UpArrow", mods = mod_shift, action = act.ActivatePaneDirection("Up") },
