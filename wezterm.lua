@@ -13,7 +13,7 @@ wezterm.on("gui-startup", function()
 end)
 config.font_size = 12.0
 config.use_ime = true
-config.window_background_opacity = 0.6
+config.window_background_opacity = 0.1
 config.macos_window_background_blur = 20
 
 ----------------------------------------------------
