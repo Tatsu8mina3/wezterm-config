@@ -10,8 +10,11 @@ config.macos_window_background_blur = 20
 ----------------------------------------------------
 -- Shell
 ----------------------------------------------------
--- 起動シェルを Git Bash に
-config.default_prog = { "C:/Program Files/Git/bin/bash.exe", "-l" }
+-- Windows のときだけ Git Bash、Mac/Linux はデフォルトシェル
+local is_windows = wezterm.target_triple:find("windows") ~= nil
+if is_windows then
+  config.default_prog = { "C:/Program Files/Git/bin/bash.exe", "-l" }
+end
 
 ----------------------------------------------------
 -- Tab
