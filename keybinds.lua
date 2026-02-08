@@ -71,6 +71,7 @@ local keys = {
   -- --------------------------------------------------
   { key = "d", mods = mod, action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
   { key = "d", mods = mod_shift, action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+  { key = "w", mods = mod_shift, action = act.CloseCurrentPane({ confirm = true }) },
   { key = "LeftArrow", mods = mod_shift, action = act.ActivatePaneDirection("Left") },
   { key = "RightArrow", mods = mod_shift, action = act.ActivatePaneDirection("Right") },
   { key = "UpArrow", mods = mod_shift, action = act.ActivatePaneDirection("Up") },
