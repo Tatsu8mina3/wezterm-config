@@ -2,6 +2,15 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
 config.automatically_reload_config = true
+
+----------------------------------------------------
+-- Git auto-pull（起動時に設定を同期）
+----------------------------------------------------
+wezterm.on("gui-startup", function()
+  wezterm.background_child_process({
+    "git", "-C", wezterm.config_dir, "pull", "--ff-only",
+  })
+end)
 config.font_size = 12.0
 config.use_ime = true
 config.window_background_opacity = 0.85
