@@ -49,8 +49,8 @@ local keys = {
   -- --------------------------------------------------
   { key = "t", mods = mod, action = act.SpawnTab("CurrentPaneDomain") },
   { key = "w", mods = mod, action = act.CloseCurrentTab({ confirm = true }) },
-  { key = "]", mods = mod_shift, action = act.ActivateTabRelative(1) },
-  { key = "[", mods = mod_shift, action = act.ActivateTabRelative(-1) },
+  { key = is_windows and "Tab" or "]", mods = is_windows and "CTRL" or "SUPER|SHIFT", action = act.ActivateTabRelative(1) },
+  { key = is_windows and "Tab" or "[", mods = is_windows and "CTRL|SHIFT" or "SUPER|SHIFT", action = act.ActivateTabRelative(-1) },
   { key = "PageUp", mods = mod, action = act.ActivateTabRelative(-1) },
   { key = "PageDown", mods = mod, action = act.ActivateTabRelative(1) },
   { key = "PageUp", mods = mod_shift, action = act.MoveTabRelative(-1) },
