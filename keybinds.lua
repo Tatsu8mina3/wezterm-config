@@ -103,8 +103,10 @@ local keys = {
   { key = "PageUp", mods = "SHIFT", action = act.ScrollByPage(-1) },
   { key = "PageDown", mods = "SHIFT", action = act.ScrollByPage(1) },
 
-  -- Mac: Cmd+F で検索 / Cmd+Ctrl+F でウィンドウ最大化（透過維持）
+  -- 検索: Mac: Cmd+F / Windows: Ctrl+Shift+F(上で定義済み)
   { key = "f", mods = "SUPER", action = act.Search({ CaseSensitiveString = "" }) },
+  -- ウィンドウ最大化（透過維持）: Mac: Cmd+Ctrl+F
+  -- Windows: PowerToysでCtrl+F→Win+↑にリマップしてるのでWezTerm側の設定は不要
   { key = "f", mods = "SUPER|CTRL", action = toggle_maximize },
 
   -- アプリ終了（Mac: Cmd+Q / Windows: Ctrl+Q）
