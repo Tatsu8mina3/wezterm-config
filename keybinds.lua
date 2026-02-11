@@ -45,6 +45,12 @@ local keys = {
   { key = "Insert", mods = "SHIFT", action = act.PasteFrom("PrimarySelection") },
 
   -- --------------------------------------------------
+  -- テキスト編集（シェルへ送信）
+  -- --------------------------------------------------
+  -- Mac: Cmd+U / Windows: Ctrl+U で入力行を丸ごと削除
+  { key = "u", mods = mod, action = act.SendKey({ key = "u", mods = "CTRL" }) },
+
+  -- --------------------------------------------------
   -- タブ操作
   -- --------------------------------------------------
   { key = "t", mods = mod, action = act.SpawnTab("CurrentPaneDomain") },
