@@ -67,7 +67,7 @@ config.native_macos_fullscreen_mode = false
 --    PowerShell なら Prism (x64エミュ) が効くので Claude Code が動作する。
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 if is_windows then
-  config.default_prog = { "pwsh.exe", "-NoLogo" }
+  config.default_prog = { "powershell.exe", "-NoLogo" }
 end
 
 ----------------------------------------------------
