@@ -62,10 +62,12 @@ config.native_macos_fullscreen_mode = false
 ----------------------------------------------------
 -- Shell
 ----------------------------------------------------
--- Windows のときだけ Git Bash、Mac/Linux はデフォルトシェル
+-- Windows のときだけ PowerShell、Mac/Linux はデフォルトシェル
+-- ※ Surface(ARM64)では Git Bash が CLANGARM64 ネイティブのため x64 バイナリ(claude.exe等)が動かない。
+--    PowerShell なら Prism (x64エミュ) が効くので Claude Code が動作する。
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 if is_windows then
-  config.default_prog = { "C:/Program Files/Git/bin/bash.exe", "-l" }
+  config.default_prog = { "pwsh.exe", "-NoLogo" }
 end
 
 ----------------------------------------------------
