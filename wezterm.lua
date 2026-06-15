@@ -3,6 +3,33 @@ local config = wezterm.config_builder()
 
 config.automatically_reload_config = true
 
+local codex_status_script = os.getenv("HOME")
+  .. "/Documents/SyncBox/scripts/codex-status/codex_status.py"
+
+local function get_codex_status()
+  local success, stdout = wezterm.run_child_process({ "python3", codex_status_script })
+  if not success then
+    return "Codex --"
+  end
+  return stdout:gsub("%s+$", "")
+end
+
+local function set_codex_right_status(window)
+  local text = " " .. get_codex_status() .. " "
+  window:set_right_status(wezterm.format({
+    { Foreground = { Color = "#FFFFFF" } },
+    { Background = { Color = "#5c6d74" } },
+    { Text = text },
+  }))
+end
+
+wezterm.on("update-right-status", function(window, pane)
+  if wezterm.GLOBAL.pull_status_visible then
+    return
+  end
+  set_codex_right_status(window)
+end)
+
 ----------------------------------------------------
 -- Git auto-pull（起動時に設定を同期 → 結果を通知）
 ----------------------------------------------------
@@ -14,8 +41,6 @@ wezterm.on("gui-startup", function(cmd)
   wezterm.GLOBAL.pull_result = { success = success, stdout = stdout, stderr = stderr }
   -- gui-startup を定義するとデフォルトウィンドウが作られないため明示的に生成
   local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
-  -- 起動時から最大化（小窓→後から最大化だとCC/Codexが狭い幅を握り見切れる対策）
-  window:gui_window():maximize()
 end)
 
 wezterm.on("window-config-reloaded", function(window, pane)
@@ -40,13 +65,15 @@ wezterm.on("window-config-reloaded", function(window, pane)
       { Background = { Color = color } },
       { Text = msg },
     }))
+    wezterm.GLOBAL.pull_status_visible = true
     -- タブが1つでもタブバーを一時表示
     local overrides = window:get_config_overrides() or {}
     overrides.hide_tab_bar_if_only_one_tab = false
     window:set_config_overrides(overrides)
     -- 5秒後にステータスを消してタブバーも元に戻す
     wezterm.time.call_after(5, function()
-      window:set_right_status("")
+      wezterm.GLOBAL.pull_status_visible = nil
+      set_codex_right_status(window)
       local o = window:get_config_overrides() or {}
       o.hide_tab_bar_if_only_one_tab = nil
       window:set_config_overrides(o)
