@@ -14,6 +14,8 @@ wezterm.on("gui-startup", function(cmd)
   wezterm.GLOBAL.pull_result = { success = success, stdout = stdout, stderr = stderr }
   -- gui-startup を定義するとデフォルトウィンドウが作られないため明示的に生成
   local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
+  -- 起動時から最大化（小窓→後から最大化だとCC/Codexが狭い幅を握り見切れる対策）
+  window:gui_window():maximize()
 end)
 
 wezterm.on("window-config-reloaded", function(window, pane)
