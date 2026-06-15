@@ -3,8 +3,17 @@ local config = wezterm.config_builder()
 
 config.automatically_reload_config = true
 
+local codex_status_script = os.getenv("HOME")
+  .. "/Documents/SyncBox/scripts/codex-status/codex_status.py"
+
 local function set_codex_right_status(window)
-  window:set_right_status("")
+  local success, stdout = wezterm.run_child_process({ "python3", codex_status_script })
+  local text = success and stdout:gsub("%s+$", "") or "Codex --"
+  window:set_right_status(wezterm.format({
+    { Foreground = { Color = "#FFFFFF" } },
+    { Background = { Color = "#5c6d74" } },
+    { Text = " " .. text .. " " },
+  }))
 end
 
 wezterm.on("update-right-status", function(window, pane)
